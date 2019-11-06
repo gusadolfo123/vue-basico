@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+		<title>Document</title>
+	</head>
+	<body>
+		<div id="app">
+			<h1>{{ titulo | uppercase }}</h1>
+			<h2>{{ subtitulo | lowercase }}</h2>
+			<template v-if="mostrar">
+				<p>Hola {{ nombre }}</p>
+				<a :href="url" target="_blank">Ir a {{ pagina }}</a>
+			</template>
+			<p v-show="mostrar">Contador {{ contador }}</p>
+			<button @click="sumar">Sumar</button>
+			<button @click="restar">Restar</button>
+
+			<hr />
+			<!-- Formularios -->
+			<!-- <form v-on:submit.prevent="submit" > -->
+			<!-- <form @submit.prevent="submit"> -->
+			<p>Tu nombre es {{ nombreInput | uppercase }}</p>
+			<input type="text" v-model="nombreInput" name="nombre" id="nombre" placeholder="Ingresar Nombre" />
+			<!-- <h2>Cursos Favoritos</h2> -->
+			<!-- <input type="checkbox" v-model="cursos" id="vue" value="vue" />
+				<label for="vue">Curso de Vue js</label>
+				<input type="checkbox" v-model="cursos" id="seo" value="seo" />
+				<label for="seo">Curso de Seo</label>
+				<input type="checkbox" v-model="cursos" id="react" value="react" />
+				<label for="react">Curso de React js</label> -->
+			<button>Enviar</button>
+			<!-- </form> -->
+			<hr />
+			<div id="lista-cursos">
+				<form @submit.prevent="submit">
+					<h2>Cursos Favoritos</h2>
+					<template v-for="curso in cursos">
+						<label :for="curso.value">{{ curso.nombre }}</label>
+						<input v-model="cursosSeleccionados" type="checkbox" :id="curso.value" :value="curso.value" />
+					</template>
+					<button>Enviar</button>
+				</form>
+			</div>
+		</div>
+
+		<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+		<script>
+			var app = new Vue({
+				el: '#app',
+				data: {
+					nombreInput: '',
+					nombre: 'Gustavo Moreno',
+					pagina: 'Google',
+					url: 'https://google.com',
+					mostrar: true,
+					titulo: 'Nuevo Titulo',
+					subtitulo: 'subtulo',
+					contador: 0,
+					cursos: [
+						{
+							nombre: 'Curso de Vue js',
+							value: 'vue',
+						},
+						{
+							nombre: 'Curso de SEO',
+							value: 'seo',
+						},
+						{
+							nombre: 'Curso de React js',
+							value: 'react',
+						},
+					],
+					cursosSeleccionados: [],
+				},
+				filters: {
+					uppercase: str => str.toUpperCase(),
+					lowercase: str => str.toLowerCase(),
+				},
+				methods: {
+					sumar: function() {
+						this.contador++;
+					},
+					restar: function() {
+						this.contador--;
+					},
+					submit: function() {
+						console.log(this.cursosSeleccionados);
+					},
+				},
+			});
+		</script>
+	</body>
+</html>
