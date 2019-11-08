@@ -22,8 +22,8 @@
 			<!-- Formularios -->
 			<!-- <form v-on:submit.prevent="submit" > -->
 			<!-- <form @submit.prevent="submit"> -->
-			<p>Tu nombre es {{ nombreInput | uppercase }}</p>
-			<input type="text" v-model="nombreInput" name="nombre" id="nombre" placeholder="Ingresar Nombre" />
+			<!-- <p>Tu nombre es {{ nombreInput | uppercase }}</p> -->
+			<!-- <input type="text" v-model="nombreInput" name="nombre" id="nombre" placeholder="Ingresar Nombre" /> -->
 			<!-- <h2>Cursos Favoritos</h2> -->
 			<!-- <input type="checkbox" v-model="cursos" id="vue" value="vue" />
 				<label for="vue">Curso de Vue js</label>
@@ -31,15 +31,23 @@
 				<label for="seo">Curso de Seo</label>
 				<input type="checkbox" v-model="cursos" id="react" value="react" />
 				<label for="react">Curso de React js</label> -->
-			<button>Enviar</button>
+			<!-- <button>Enviar</button> -->
 			<!-- </form> -->
-			<hr />
-			<div id="lista-cursos">
+			<!-- <hr /> -->
+			<!-- <div id="lista-cursos">
 				<form @submit.prevent="submit">
 					<h2>Cursos Favoritos</h2>
 					<template v-for="curso in cursos">
 						<label :for="curso.value">{{ curso.nombre }}</label>
 						<input v-model="cursosSeleccionados" type="checkbox" :id="curso.value" :value="curso.value" />
+					</template>
+					<button>Enviar</button>
+				</form>
+			</div> -->
+			<div>
+				<form @submit.prevent="submit">
+					<template v-for="curso in cursos">
+						<curso :curso="curso" @checked="selectCurso"></curso>
 					</template>
 					<button>Enviar</button>
 				</form>
@@ -49,6 +57,21 @@
 		<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 
 		<script>
+			Vue.component('curso', {
+				props: ['curso'],
+				methods: {
+					onchange: function(event) {
+						this.$emit('checked', this.curso.value, event.target.checked);
+					},
+				},
+				template: `
+					<div>
+						<label :for="curso.value">{{ curso.nombre }}</label>
+						<input @change="onchange" type="checkbox" :id="curso.value" :value="curso.value" />
+					</div>
+				`,
+			});
+
 			var app = new Vue({
 				el: '#app',
 				data: {
@@ -81,6 +104,13 @@
 					lowercase: str => str.toLowerCase(),
 				},
 				methods: {
+					selectCurso: function(curso, checked) {
+						if (checked) this.cursosSeleccionados.push(curso);
+						else {
+							let index = this.cursosSeleccionados.indexOf(curso);
+							this.cursosSeleccionados.splice(index, 1);
+						}
+					},
 					sumar: function() {
 						this.contador++;
 					},
